@@ -1,3 +1,3 @@
-"""AI Data & Training Manager package."""
+﻿"""AI Data & Training Manager."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
