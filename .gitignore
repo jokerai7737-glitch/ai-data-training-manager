@@ -50,3 +50,5 @@ wandb/
 *.egg-info/
 
 *.egg-info/
+data/datasets.json
+*.log
