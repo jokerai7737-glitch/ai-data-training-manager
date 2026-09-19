@@ -14,27 +14,15 @@ from ai_pipeline.cli.commands import (
 from ai_pipeline.logic.exceptions import PipelineError
 
 
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        prog="ai-pipeline",
-        description="AI Data & Training Manager",
-    )
-
-    subparsers = parser.add_subparsers(
-        dest="command",
-        required=True,
-    )
-
+def _add_dataset_commands(subparsers) -> None:
     dataset_parser = subparsers.add_parser(
         "dataset",
         help="Manage datasets",
     )
 
-    dataset_subparsers = (
-        dataset_parser.add_subparsers(
-            dest="dataset_command",
-            required=True,
-        )
+    dataset_subparsers = dataset_parser.add_subparsers(
+        dest="dataset_command",
+        required=True,
     )
 
     add_parser = dataset_subparsers.add_parser(
@@ -52,6 +40,8 @@ def build_parser() -> argparse.ArgumentParser:
         help="List registered datasets",
     )
 
+
+def _add_validate_command(subparsers) -> None:
     validate_parser = subparsers.add_parser(
         "validate",
         help="Validate a CSV dataset",
@@ -62,6 +52,8 @@ def build_parser() -> argparse.ArgumentParser:
         default="label",
     )
 
+
+def _add_preprocess_command(subparsers) -> None:
     preprocess_parser = subparsers.add_parser(
         "preprocess",
         help="Clean and preprocess a dataset",
@@ -73,6 +65,8 @@ def build_parser() -> argparse.ArgumentParser:
         default="label",
     )
 
+
+def _add_train_command(subparsers) -> None:
     train_parser = subparsers.add_parser(
         "train",
         help="Train a KNN model",
@@ -94,6 +88,8 @@ def build_parser() -> argparse.ArgumentParser:
         default=0.8,
     )
 
+
+def _add_evaluate_command(subparsers) -> None:
     evaluate_parser = subparsers.add_parser(
         "evaluate",
         help="Evaluate a saved model",
@@ -105,16 +101,16 @@ def build_parser() -> argparse.ArgumentParser:
         default="results",
     )
 
+
+def _add_pipeline_command(subparsers) -> None:
     pipeline_parser = subparsers.add_parser(
         "pipeline",
         help="Run pipeline operations",
     )
 
-    pipeline_subparsers = (
-        pipeline_parser.add_subparsers(
-            dest="pipeline_command",
-            required=True,
-        )
+    pipeline_subparsers = pipeline_parser.add_subparsers(
+        dest="pipeline_command",
+        required=True,
     )
 
     run_parser = pipeline_subparsers.add_parser(
@@ -149,6 +145,25 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=0.8,
     )
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="ai-pipeline",
+        description="AI Data & Training Manager",
+    )
+
+    subparsers = parser.add_subparsers(
+        dest="command",
+        required=True,
+    )
+
+    _add_dataset_commands(subparsers)
+    _add_validate_command(subparsers)
+    _add_preprocess_command(subparsers)
+    _add_train_command(subparsers)
+    _add_evaluate_command(subparsers)
+    _add_pipeline_command(subparsers)
 
     return parser
 
