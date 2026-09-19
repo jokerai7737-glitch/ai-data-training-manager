@@ -175,72 +175,91 @@ def command_evaluate(
         f"{experiment.test_rows}"
     )
 
-
 def command_pipeline(
     args,
     services,
 ) -> None:
     print("=== AI DATA PIPELINE ===")
 
-    validation_args = type(
-        "ValidationArgs",
-        (),
-        {
-            "path": args.input,
-            "label": args.label,
-        },
-    )()
+    input_path = validate_csv_path(args.input)
+    records = services["csv"].read(input_path)
 
-    command_validate(
-        validation_args,
-        services,
+    validate_records(
+        records,
+        args.label,
     )
 
-    preprocess_args = type(
-        "PreprocessArgs",
-        (),
-        {
-            "input": args.input,
-            "output": args.output,
-            "label": args.label,
-        },
-    )()
-
-    command_preprocess(
-        preprocess_args,
-        services,
+    print("Validation successful.")
+    print(f"Rows: {len(records)}")
+    print(
+        "Columns: "
+        + ", ".join(records[0])
     )
 
-    train_args = type(
-        "TrainArgs",
-        (),
-        {
-            "dataset": args.output,
-            "model": args.model,
-            "k": args.k,
-            "label": args.label,
-            "train_ratio": args.train_ratio,
-        },
-    )()
-
-    command_train(
-        train_args,
-        services,
+    preprocessing_stats = services["preprocess"].process(
+        args.input,
+        args.output,
+        args.label,
     )
 
-    evaluate_args = type(
-        "EvaluateArgs",
-        (),
-        {
-            "dataset": args.output,
-            "model": args.model,
-            "results": args.results,
-        },
-    )()
+    print("Preprocessing completed.")
+    print(
+        f"Input rows: "
+        f"{preprocessing_stats['input_rows']}"
+    )
+    print(
+        f"Output rows: "
+        f"{preprocessing_stats['output_rows']}"
+    )
+    print(
+        f"Removed rows: "
+        f"{preprocessing_stats['removed_rows']}"
+    )
+    print(f"Output: {args.output}")
 
-    command_evaluate(
-        evaluate_args,
-        services,
+    model = services["training"].train(
+        args.output,
+        args.model,
+        args.k,
+        args.label,
+        args.train_ratio,
+    )
+
+    print("Training completed.")
+    print(f"Algorithm: {model.model_type}")
+    print(f"k: {model.k}")
+    print(
+        "Features: "
+        + ", ".join(model.feature_columns)
+    )
+    print(
+        f"Training rows: "
+        f"{len(model.train_rows)}"
+    )
+    print(f"Model: {args.model}")
+
+    experiment = services["evaluation"].evaluate(
+        args.output,
+        args.model,
+        args.results,
+    )
+
+    print("Evaluation completed.")
+    print(
+        f"Experiment: "
+        f"{experiment.experiment_id}"
+    )
+    print(
+        f"Accuracy: "
+        f"{experiment.accuracy:.2%}"
+    )
+    print(
+        f"Train rows: "
+        f"{experiment.train_rows}"
+    )
+    print(
+        f"Test rows: "
+        f"{experiment.test_rows}"
     )
 
     print("=== PIPELINE FINISHED ===")
