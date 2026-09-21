@@ -1,36 +1,26 @@
 # AI Data & Training Manager
 
-A command-line platform for managing datasets and running an AI training pipeline.
+A CLI platform for dataset validation, preprocessing, KNN training, evaluation, backup, and Linux automation.
 
-## Project Goal
+## Features
 
-The system demonstrates a structured AI data workflow using Python, Git/GitHub, testing, Clean Code, Linux/Bash automation, and Vibe Coding practices.
+- Dataset validation
+- Data preprocessing
+- KNN training and evaluation
+- Experiment and model artifacts
+- Linux/Bash automation
+- Logging and backup
+- Health checks
+- Automated tests
+- GitHub Actions CI
 
 ## Pipeline
 
-Dataset ? Validation ? Cleaning ? Preprocessing ? Training ? Evaluation ? Model Artifact ? Results
+Dataset -> Validation -> Preprocessing -> Training -> Evaluation -> Model -> Results -> Backup -> Health Check
 
-## Main Commands
+## Setup
 
-python -m ai_pipeline.cli.main --help
-
-python -m ai_pipeline.cli.main validate data/sample/classification.csv
-
-python -m ai_pipeline.cli.main pipeline run data/sample/classification.csv
-
-## Architecture
-
-- cli: command-line interface
-- logic: business logic, models, validation, services
-- io: CSV, JSON, and file operations
-- tests: automated tests
-- scripts: Linux/Bash automation
-
-## Technologies
-
-Python 3.12, argparse, CSV, JSON, pytest, Git, GitHub, Bash/Linux.
-
-## Development Environment
-
-The main development environment is Windows.
-Kali Linux is used only for Linux-specific requirements such as Bash automation, permissions, processes, SSH, and scheduled tasks.
+```bash
+git clone https://github.com/jokerai7737-glitch/ai-data-training-manager.git
+cd ai-data-training-manager
+bash scripts/setup.sh
